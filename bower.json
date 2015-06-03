@@ -4,7 +4,6 @@
   "description": "Utility functions",
   "main": "hc-utils.js",
   "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",

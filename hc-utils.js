@@ -116,11 +116,11 @@
         _isValidDate = function(date,dateFormat)
         { 
             if(date){
-            	var d = this.getMomentDate(date,dateFormat);
-           	    return d.isValid();
-           	}else{
-           		return true;
-           	}
+                var d = this.getMomentDate(date,dateFormat);
+                return d.isValid();
+            }else{
+                return true;
+            }
         },
         isValidDob = function(date,dateFormat){
             var d = this.getMomentDate(date,dateFormat),
@@ -247,6 +247,46 @@
             };
             return serializeJSON;
         })();
+        /**
+ * Tries to decode the URI component without throwing an exception.
+ *
+ * @private
+ * @param str value potential URI component to check.
+ * @returns {boolean} True if `value` can be decoded
+ * with the decodeURIComponent function.
+ */
+    function tryDecodeURIComponent(value) {
+      try {
+        return decodeURIComponent(value);
+      } catch (e) {
+        // Ignore any invalid uri component
+      }
+    }
+
+    /**
+     * Parses an escaped url query string into key-value pairs.
+     * @returns {Object.<string,boolean|Array>}
+     */
+    function parseKeyValue(/**string*/keyValue) {
+      var obj = {}, key_value, key;
+      _.each((keyValue || "").split('&'), function(keyValue) {
+        if (keyValue) {
+          key_value = keyValue.replace(/\+/g,'%20').split('=');
+          key = tryDecodeURIComponent(key_value[0]);
+          if (!_.isUndefined(key)) {
+            var val = !_.isUndefined(key_value[1]) ? tryDecodeURIComponent(key_value[1]) : true;
+            if (!hasOwnProperty.call(obj, key)) {
+              obj[key] = val;
+            } else if (_.isArray(obj[key])) {
+              obj[key].push(val);
+            } else {
+              obj[key] = [obj[key],val];
+            }
+          }
+        }
+      });
+      return obj;
+    }
     window["HCUtils"] = {
         SSN: SSN,
         SSN_HYPHENATED: SSN_HYPHENATED,
@@ -286,6 +326,7 @@
         isValidMilitaryHour: isValidMilitaryHour,
         isUniqueStringInGroup: isUniqueStringInGroup,
         isValidSSN: isValidSSN,
-        serializeJSON: serializeJSON
+        serializeJSON: serializeJSON,
+        parseKeyValue: parseKeyValue
     };
 })();

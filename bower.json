@@ -1,6 +1,6 @@
 {
   "name": "hc-utils",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Utility functions",
   "main": "hc-utils.js",
   "private": true,

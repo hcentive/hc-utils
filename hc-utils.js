@@ -122,7 +122,12 @@
                 return true;
             }
         },
-        isValidDob = function(date,dateFormat){
+        isValidDob = function(date,range,dateFormat){
+        	if(angular.isObject(range))
+        	{
+        		this.MIN_AGE = angular.isDefined(range.minAge) ? range.minAge : 18;
+        		this.MAX_AGE = angular.isDefined(range.maxAge) ? range.maxAge : 120;
+        	}
             var d = this.getMomentDate(date,dateFormat),
             age = moment().diff(d, 'years');
             return this.isValidAge(age);

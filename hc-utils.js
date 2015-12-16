@@ -129,7 +129,16 @@
         		this.MAX_AGE = angular.isDefined(range.maxAge) ? range.maxAge : 120;
         	}
             var d = this.getMomentDate(date,dateFormat),
-            age = moment().diff(d, 'years');
+                age = moment().diff(d, 'years', true),
+            	currentDate = new Date(),
+            	_date = new Date(date);
+            
+            //'moment().diff()' function returns greater floating point value when dates are same
+            //below code will handle this case
+            if(currentDate.getDate() === _date.getDate())
+            {
+            	age = parseInt(age);
+            }
             return this.isValidAge(age);
         },
         isDateAfter = function(d,date,dateFormat){
